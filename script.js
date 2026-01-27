@@ -137,20 +137,6 @@ const GameController = (function() {
         }
     ];
 
-    const setPlayerName = (token, name) => {
-        if (!(token in ["X", "O"])) {
-            console.log("Invalid token!");
-            return;
-        }
-
-        if (token === "X") {
-            players[0].name = name;
-        }
-        else if (token === "O") {
-            players[1].name = name;
-        }
-    };
-
     let activePlayer = players[0];
     let winner = "";
 
@@ -201,7 +187,6 @@ const GameController = (function() {
     };
  
     return {
-        setPlayerName,
         getActivePlayer,
         getBoard: board.getBoard,
         playRound
