@@ -48,6 +48,18 @@ const GameController = (function() {
             console.log(boardString);
         };
 
+        const checkGotEmptyCell = () => {
+            for (let i = 0; i < 3; ++i) {
+                for (let j = 0; j < 3; ++j) {
+                    if (board[i][j].getValue() === "_") {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         const checkWinner = () => {
             for (let i = 0; i < 3; ++i) {
                 if (board[i][0].getValue() === "X" 
@@ -102,7 +114,8 @@ const GameController = (function() {
             getBoard,
             chooseCell,
             printBoard,
-            checkWinner
+            checkWinner,
+            checkGotEmptyCell
         };
     }
 
@@ -169,8 +182,14 @@ const GameController = (function() {
             board.printBoard();
         }
         else {
-            switchPlayerTurn();
-            printRound();
+            if (board.checkGotEmptyCell()) {
+                switchPlayerTurn();
+                printRound();
+            }
+            else {
+                board.printBoard();
+                console.log(`Draw!`);
+            }
         }
 
         return true;
@@ -179,9 +198,9 @@ const GameController = (function() {
     const playGame = () => {
         printRound();
         while (winner === "") {
-            const rowInput = prompt("Enter the row: ");
-            const columnInput = prompt("Enter the column: ");
-            if (playRound(rowInput, columnInput) === false) {
+            const cellInput = prompt(`${getActivePlayer().name}'s turn.\nEnter the cell coords (row [space] column):`).split(" ");
+            
+            if (playRound(cellInput[0], cellInput[1]) === false) {
                 continue;
             }
         }
