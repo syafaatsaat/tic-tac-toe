@@ -166,8 +166,8 @@ const GameController = (function() {
         }
 
         console.log(
-            `${getActivePlayer().name}'s token (${getActivePlayer().token}) is 
-            placed at ${row}, ${column}`
+            `${getActivePlayer().name}'s token (${getActivePlayer().token})` + 
+            ` is placed at ${row}, ${column}`
         );
 
         winner = board.checkWinner();
@@ -198,7 +198,10 @@ const GameController = (function() {
     const playGame = () => {
         printRound();
         while (winner === "") {
-            const cellInput = prompt(`${getActivePlayer().name}'s turn.\nEnter the cell coords (row [space] column):`).split(" ");
+            const cellInput = prompt(
+                `${getActivePlayer().name}'s turn.\nEnter the cell coords` + 
+                ` (row [space] column):`
+            ).split(" ");
             
             if (playRound(cellInput[0], cellInput[1]) === false) {
                 continue;
@@ -212,7 +215,6 @@ const GameController = (function() {
         setPlayerName,
         getActivePlayer,
         getBoard: board.getBoard,
-        playRound,
-        playGame
+        playRound
     };
 })();
