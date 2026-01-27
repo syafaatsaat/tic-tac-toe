@@ -28,6 +28,9 @@ const GameController = (function() {
 
         const getBoard = () => board;
 
+        const getNumOfRows = () => rows;
+        const getNumOfColumns = () => columns;
+
         const chooseCell = (row, column, player) => {
             if (board[row][column].getValue() != "_") {
                 return false;
@@ -112,6 +115,8 @@ const GameController = (function() {
 
         return {
             getBoard,
+            getNumOfRows,
+            getNumOfColumns,
             chooseCell,
             printBoard,
             checkWinner,
@@ -161,9 +166,10 @@ const GameController = (function() {
     };
 
     const playRound = (row, column) => {
-        if (board.chooseCell(row, column, getActivePlayer().token) === false) {
-            return false;
-        }
+        // if (board.chooseCell(row, column, getActivePlayer().token) === false) {
+        //     return false;
+        // }
+        board.chooseCell(row, column, getActivePlayer().token);
 
         console.log(
             `${getActivePlayer().name}'s token (${getActivePlayer().token})` + 
@@ -177,6 +183,7 @@ const GameController = (function() {
                 if (winner === players[i].token) {
                     winner = players[i];
                     console.log(`${winner.name} wins!`);
+                    return `${winner.name} wins!`;
                 }
             }
             board.printBoard();
@@ -189,27 +196,28 @@ const GameController = (function() {
             else {
                 board.printBoard();
                 console.log(`Draw!`);
+                return "No more available moves. Draw!"
             }
         }
 
-        return true;
+        return "";
     };
 
-    const playGame = () => {
-        printRound();
-        while (winner === "") {
-            const cellInput = prompt(
-                `${getActivePlayer().name}'s turn.\nEnter the cell coords` + 
-                ` (row [space] column):`
-            ).split(" ");
+    // const playGame = () => {
+    //     printRound();
+    //     while (winner === "") {
+    //         const cellInput = prompt(
+    //             `${getActivePlayer().name}'s turn.\nEnter the cell coords` + 
+    //             ` (row [space] column):`
+    //         ).split(" ");
             
-            if (playRound(cellInput[0], cellInput[1]) === false) {
-                continue;
-            }
-        }
-    };
+    //         if (playRound(cellInput[0], cellInput[1]) === false) {
+    //             continue;
+    //         }
+    //     }
+    // };
 
-    playGame();
+    //playGame();
  
     return {
         setPlayerName,
@@ -218,3 +226,54 @@ const GameController = (function() {
         playRound
     };
 })();
+
+const ScreenController = (function() {
+    const gameboardDiv = document.querySelector("#gameboard");
+    const infoP = document.querySelector("#info");
+
+    const updateInfo = (text = "") => {
+        if (text === "") {
+            let infoText = GameController.getActivePlayer().name + "'s (";
+            infoText += GameController.getActivePlayer().token + ") Turn";
+            infoP.textContent = infoText;
+        }
+        else {
+            infoP.textContent = text;
+        }
+    };
+
+    const setupBoard = () => {
+        const gameBoard = GameController.getBoard();
+        updateInfo();
+
+        for (let i = 0; i < gameBoard.length; ++i) {
+            const rowDiv = document.createElement("div");
+            rowDiv.classList.add("row");
+
+            for (let j = 0; j < gameBoard[i].length; ++j) {
+                const cellButton = document.createElement("button");
+                cellButton.classList.add("cell");
+                cellButton.dataset.cellCoords = i + "-" + j;
+                cellButton.textContent = "_";
+
+                cellButton.addEventListener('click', () => {
+                    cellButton.textContent = 
+                        GameController.getActivePlayer().token;
+                    let returnText = GameController.playRound(i, j);
+                    cellButton.disabled = true;
+                    updateInfo(returnText);
+                });
+
+                rowDiv.appendChild(cellButton);
+            }
+
+            gameboardDiv.appendChild(rowDiv);
+        }
+    };
+
+    return {
+        setupBoard
+    };
+})();
+
+ScreenController.setupBoard();
