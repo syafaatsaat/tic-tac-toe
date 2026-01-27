@@ -166,9 +166,6 @@ const GameController = (function() {
     };
 
     const playRound = (row, column) => {
-        // if (board.chooseCell(row, column, getActivePlayer().token) === false) {
-        //     return false;
-        // }
         board.chooseCell(row, column, getActivePlayer().token);
 
         console.log(
@@ -202,22 +199,6 @@ const GameController = (function() {
 
         return "";
     };
-
-    // const playGame = () => {
-    //     printRound();
-    //     while (winner === "") {
-    //         const cellInput = prompt(
-    //             `${getActivePlayer().name}'s turn.\nEnter the cell coords` + 
-    //             ` (row [space] column):`
-    //         ).split(" ");
-            
-    //         if (playRound(cellInput[0], cellInput[1]) === false) {
-    //             continue;
-    //         }
-    //     }
-    // };
-
-    //playGame();
  
     return {
         setPlayerName,
