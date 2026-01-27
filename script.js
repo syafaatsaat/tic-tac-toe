@@ -223,7 +223,7 @@ const ScreenController = (function() {
         }
     };
 
-    const setupBoard = () => {
+    const updateBoard = () => {
         const gameBoard = GameController.getBoard();
         updateInfo();
 
@@ -235,11 +235,18 @@ const ScreenController = (function() {
                 const cellButton = document.createElement("button");
                 cellButton.classList.add("cell");
                 cellButton.dataset.cellCoords = i + "-" + j;
-                cellButton.textContent = "_";
+                cellButton.textContent = " ";
 
                 cellButton.addEventListener('click', () => {
-                    cellButton.textContent = 
-                        GameController.getActivePlayer().token;
+                    switch (GameController.getActivePlayer().token) {
+                        case "X":
+                            cellButton.classList.add("token-X");
+                            break;
+                        case "O":
+                            cellButton.classList.add("token-O");
+                            break;
+                    }
+
                     let returnText = GameController.playRound(i, j);
                     cellButton.disabled = true;
                     updateInfo(returnText);
@@ -253,8 +260,8 @@ const ScreenController = (function() {
     };
 
     return {
-        setupBoard
+        updateBoard
     };
 })();
 
-ScreenController.setupBoard();
+ScreenController.updateBoard();
