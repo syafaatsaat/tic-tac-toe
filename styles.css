@@ -1,3 +1,7 @@
+:root {
+    --bg-color: rgb(44, 44, 44);
+}
+
 html,
 body {
     width: 100vw;
@@ -8,7 +12,7 @@ body {
     padding: 0;
 
     color: white;
-    background-color: rgb(44, 44, 44);
+    background-color: var(--bg-color);
 
     font-family: "Jersey 10", sans-serif;
     font-weight: 400;
@@ -36,12 +40,14 @@ p {
     font-size: 32px;
     font-style: italic;
     margin: 0;
+    padding: 0;
 }
 
 #gameboard {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    background-color: black;
 }
 
 .row {
@@ -72,7 +78,6 @@ p {
     height: 200px;
     border: 10px solid white;
     border-radius: 20px;
-    background-color: transparent;
 }
 
 button.cell:hover {
@@ -81,5 +86,6 @@ button.cell:hover {
 }
 
 button.cell:disabled {
+    cursor: default;
     border: 0;
 }

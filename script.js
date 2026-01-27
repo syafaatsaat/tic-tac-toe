@@ -220,6 +220,7 @@ const ScreenController = (function() {
         }
         else {
             infoP.textContent = text;
+            disableGame();
         }
     };
 
@@ -257,6 +258,13 @@ const ScreenController = (function() {
 
             gameboardDiv.appendChild(rowDiv);
         }
+    };
+
+    const disableGame = () => {
+        const cellButtons = document.querySelectorAll(".cell");
+        cellButtons.forEach((button) => {
+            button.disabled = true;
+        });
     };
 
     return {
