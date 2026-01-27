@@ -2,14 +2,14 @@ const GameController = (function() {
     function Cell() {
         let value = "_";
 
-        const addToken = (token) => {
+        const setToken = (token) => {
             value = token;
         };
 
         const getValue = () => value;
 
         return {
-            addToken,
+            setToken,
             getValue
         };
     }
@@ -29,16 +29,23 @@ const GameController = (function() {
         const getBoard = () => board;
 
         const chooseCell = (row, column, player) => {
-            board[row][column].addToken(player);
+            if (board[row][column].getValue() != "_") {
+                return false;
+            }
+
+            board[row][column].setToken(player);
+            return true;
         };
 
         const printBoard = () => {
-            const boardWithCellValues = board.map(
-                (row) => row.map(
-                    (cell) => cell.getValue()
-                )
-            );
-            console.log(boardWithCellValues);
+            let boardString = "";
+            for (let i = 0; i < 3; ++i) {
+                for (let j = 0; j < 3; ++j) {
+                    boardString += board[i][j].getValue() + " ";
+                }
+                boardString += "\n";
+            }
+            console.log(boardString);
         };
 
         const checkWinner = () => {
@@ -127,6 +134,7 @@ const GameController = (function() {
     };
 
     let activePlayer = players[0];
+    let winner = "";
 
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -140,33 +148,52 @@ const GameController = (function() {
     };
 
     const playRound = (row, column) => {
+        if (board.chooseCell(row, column, getActivePlayer().token) === false) {
+            return false;
+        }
+
         console.log(
             `${getActivePlayer().name}'s token (${getActivePlayer().token}) is 
             placed at ${row}, ${column}`
         );
 
-        board.chooseCell(row, column, getActivePlayer().token);
-
-        const winner = board.checkWinner();
+        winner = board.checkWinner();
         
-        for (let i = 0; i < 2; ++i) {
-            if (winner === players[i].token) {
-                console.log(`${players[i].name} wins!`);
-                break;
+        if (winner != "") {
+            for (let i = 0; i < 2; ++i) {
+                if (winner === players[i].token) {
+                    winner = players[i];
+                    console.log(`${winner.name} wins!`);
+                }
             }
+            board.printBoard();
         }
-        
-        switchPlayerTurn();
+        else {
+            switchPlayerTurn();
+            printRound();
+        }
 
-        printRound();
+        return true;
     };
 
-    printRound();
+    const playGame = () => {
+        printRound();
+        while (winner === "") {
+            const rowInput = prompt("Enter the row: ");
+            const columnInput = prompt("Enter the column: ");
+            if (playRound(rowInput, columnInput) === false) {
+                continue;
+            }
+        }
+    };
 
+    playGame();
+ 
     return {
         setPlayerName,
         getActivePlayer,
         getBoard: board.getBoard,
-        playRound
+        playRound,
+        playGame
     };
 })();
