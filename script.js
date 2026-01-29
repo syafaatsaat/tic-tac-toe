@@ -195,16 +195,16 @@ const GameController = (function() {
 
 const ScreenController = (function() {
     const gameboardDiv = document.querySelector("#gameboard");
-    const infoP = document.querySelector("#info");
+    //const infoP = document.querySelector("#info");
 
     const updateInfo = (text = "") => {
         if (text === "") {
             let infoText = GameController.getActivePlayer().name + "'s (";
             infoText += GameController.getActivePlayer().token + ") Turn";
-            infoP.textContent = infoText;
+            //infoP.textContent = infoText;
         }
         else {
-            infoP.textContent = text;
+            //infoP.textContent = text;
             disableGame();
         }
     };
@@ -226,10 +226,12 @@ const ScreenController = (function() {
                 cellButton.addEventListener('click', () => {
                     switch (GameController.getActivePlayer().token) {
                         case "X":
-                            cellButton.classList.add("token-X");
+                            //cellButton.classList.add("token-X");
+                            cellButton.textContent = "X";
                             break;
                         case "O":
-                            cellButton.classList.add("token-O");
+                            //cellButton.classList.add("token-O");
+                            cellButton.textContent = "O";
                             break;
                     }
 

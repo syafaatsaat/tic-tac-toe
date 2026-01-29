@@ -16,14 +16,14 @@
 </head>
 
 <body>
-    <dialog id="main-menu">
+    <!-- <dialog id="main-menu">
         <p>TIC TAC TOE</p>
         <div id="menu-buttons">
             <button>PLAYER VS. PLAYER</button>
             <button>PLAYER VS. BOT</button>
         </div>
     </dialog>
-    <dialog id="pvp-menu" open>
+    <dialog id="pvp-menu">
         <p>PLAYER VS. PLAYER</p>
         <div id="name-form">
             <p>ENTER PLAYER NAMES:</p>
@@ -42,20 +42,23 @@
             <button>BACK</button>
             <button>START</button>
         </div>
-    </dialog>
-    <!-- <div class="container">
-        <h1>TIC TAC TOE</h1>
-        <div id="main-content">
-            <p id="info">Player One's (X) Turn</p>
-            <p id="scoreboard">0 : 0</p>
-            <div id="gameboard">
+    </dialog> -->
+    <div id="main-content">
+        <div id="scoreboard">
+            <div id="player-one" class="player-col">
+                <p>[X]</p>
+                <p>PLAYER ONE</p>
+                <p>0</p>
             </div>
-            <div id="buttons">
-                <button id="restart">Play Again</button>
-                <button id="new-game">New Game</button>
+            <div id="player-two" class="player-col">
+                <p>[O]</p>
+                <p>PLAYER TWO</p>
+                <p>0</p>
             </div>
         </div>
-    </div>   -->
+        <div id="gameboard">
+        </div>
+    </div>  
 </body>
 
 </html>
