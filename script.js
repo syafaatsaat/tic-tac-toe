@@ -63,6 +63,14 @@ const GameController = (function() {
             return false;
         }
 
+        const restartBoard = () => {
+            for (let i = 0; i < 3; ++i) {
+                for (let j = 0; j < 3; ++j) {
+                    board[i][j].setToken("_");
+                }
+            }
+        }
+
         const checkWinner = () => {
             for (let i = 0; i < 3; ++i) {
                 if (board[i][0].getValue() === "X" 
@@ -119,6 +127,7 @@ const GameController = (function() {
             getNumOfColumns,
             chooseCell,
             printBoard,
+            restartBoard,
             checkWinner,
             checkGotEmptyCell
         };
@@ -166,7 +175,7 @@ const GameController = (function() {
                 if (winner === players[i].token) {
                     winner = players[i];
                     console.log(`${winner.name} wins!`);
-                    return `${winner.name} wins!`;
+                    return `${winner.token}`;
                 }
             }
             board.printBoard();
@@ -179,7 +188,7 @@ const GameController = (function() {
             else {
                 board.printBoard();
                 console.log(`Draw!`);
-                return "No more available moves. Draw!"
+                return "DRAW";
             }
         }
 
@@ -189,29 +198,48 @@ const GameController = (function() {
     return {
         getActivePlayer,
         getBoard: board.getBoard,
+        restartBoard: board.restartBoard,
         playRound
     };
 })();
 
 const ScreenController = (function() {
     const gameboardDiv = document.querySelector("#gameboard");
-    //const infoP = document.querySelector("#info");
+    const playerOneDiv = document.querySelector("#player-one");
+    const playerTwoDiv = document.querySelector("#player-two");
 
-    const updateInfo = (text = "") => {
-        if (text === "") {
-            let infoText = GameController.getActivePlayer().name + "'s (";
-            infoText += GameController.getActivePlayer().token + ") Turn";
-            //infoP.textContent = infoText;
+    const updateScoreboard = (result = "") => {
+        switch (GameController.getActivePlayer().token) {
+            case "X":
+                playerOneDiv.classList.add("active-player");
+                playerTwoDiv.classList.remove("active-player");
+                break;
+            case "O":
+                playerOneDiv.classList.remove("active-player");
+                playerTwoDiv.classList.add("active-player");
+                break;
         }
-        else {
-            //infoP.textContent = text;
-            disableGame();
+
+        let score = 0;
+        switch (result) {
+            case "X":
+                score = +playerOneDiv.children[2].textContent;
+                playerOneDiv.children[2].textContent = score + 1;
+                break;
+            case "O":
+                score = +playerTwoDiv.children[2].textContent;
+                playerTwoDiv.children[2].textContent = score + 1;
+                break;
+        }
+
+        if (result != "") {
+            restartGame();
         }
     };
 
-    const updateBoard = () => {
+    const updateGameboard = () => {
         const gameBoard = GameController.getBoard();
-        updateInfo();
+        updateScoreboard();
 
         for (let i = 0; i < gameBoard.length; ++i) {
             const rowDiv = document.createElement("div");
@@ -226,18 +254,16 @@ const ScreenController = (function() {
                 cellButton.addEventListener('click', () => {
                     switch (GameController.getActivePlayer().token) {
                         case "X":
-                            //cellButton.classList.add("token-X");
                             cellButton.textContent = "X";
                             break;
                         case "O":
-                            //cellButton.classList.add("token-O");
                             cellButton.textContent = "O";
                             break;
                     }
 
-                    let returnText = GameController.playRound(i, j);
+                    let result = GameController.playRound(i, j);
                     cellButton.disabled = true;
-                    updateInfo(returnText);
+                    updateScoreboard(result);
                 });
 
                 rowDiv.appendChild(cellButton);
@@ -247,16 +273,28 @@ const ScreenController = (function() {
         }
     };
 
-    const disableGame = () => {
-        const cellButtons = document.querySelectorAll(".cell");
-        cellButtons.forEach((button) => {
-            button.disabled = true;
-        });
+    const restartGame = () => {
+        GameController.restartBoard();
+
+        let child = gameboardDiv.lastElementChild;
+        while (child) {
+            gameboardDiv.removeChild(child);
+            child = gameboardDiv.lastElementChild;
+        }
+        updateGameboard();
+
+        if (playerOneDiv.classList.contains("active-player") === false) {
+            playerOneDiv.classList.add("active-player");
+        }
+
+        if (playerTwoDiv.classList.contains("active-player")) {
+            playerTwoDiv.classList.remove("active-player");
+        }
     };
 
     return {
-        updateBoard
+        updateGameboard
     };
 })();
 
-ScreenController.updateBoard();
+ScreenController.updateGameboard();
