@@ -11,17 +11,51 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
      rel="stylesheet">
 </head>
 
 <body>
-    <div class="container">
-        <h1>Tic Tac Toe</h1>
-        <p id="info">Player One's (X) Turn</p>
-        <div id="gameboard">
+    <dialog id="main-menu">
+        <p>TIC TAC TOE</p>
+        <div id="menu-buttons">
+            <button>PLAYER VS. PLAYER</button>
+            <button>PLAYER VS. BOT</button>
         </div>
-    </div>  
+    </dialog>
+    <dialog id="pvp-menu" open>
+        <p>PLAYER VS. PLAYER</p>
+        <div id="name-form">
+            <p>ENTER PLAYER NAMES:</p>
+            <div class="form-row">
+                <label for="player-one">X</label>
+                <input type="text" id="player-one" name="player-one" 
+                placeholder="PLAYER ONE"/>
+            </div>
+            <div class="form-row">
+                <label for="player-two">O</label>
+                <input type="text" id="player-two" name="player-two" 
+                placeholder="PLAYER TWO"/>
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <button>BACK</button>
+            <button>START</button>
+        </div>
+    </dialog>
+    <!-- <div class="container">
+        <h1>TIC TAC TOE</h1>
+        <div id="main-content">
+            <p id="info">Player One's (X) Turn</p>
+            <p id="scoreboard">0 : 0</p>
+            <div id="gameboard">
+            </div>
+            <div id="buttons">
+                <button id="restart">Play Again</button>
+                <button id="new-game">New Game</button>
+            </div>
+        </div>
+    </div>   -->
 </body>
 
 </html>
