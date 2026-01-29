@@ -1,5 +1,5 @@
 :root {
-    --blue-border-color: rgb(56, 56, 196);
+    --blue-border-color: rgb(81, 81, 220);
 }
 
 html,
@@ -31,14 +31,17 @@ body {
 dialog {
     width: 40%;
     height: 50%;
-    border: 10px solid white;
+    border: 10px solid var(--blue-border-color);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    padding: 20px;
 }
 
 p {
     text-align: center;
+    padding: 0;
+    margin: 0;
 }
 
 #menu-buttons {
@@ -57,7 +60,40 @@ button {
 }
 
 button:hover {
-    color: aqua;
+    color: orange;
+}
+
+#pvp-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+input {
+    padding: 5px;
+    text-transform: uppercase;
+    border-color: var(--blue-border-color);
+}
+
+input:focus {
+    outline-color: orange;
+}
+
+#name-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#name-form > p {
+    text-align: start;
+}
+
+.nav-buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .container {
