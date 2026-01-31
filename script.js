@@ -146,6 +146,11 @@ const GameController = (function() {
         }
     ];
 
+    const editPlayerNames = (p1Name, p2Name) => {
+        players[0].name = p1Name;
+        players[1].name = p2Name;
+    };
+
     let activePlayer = players[0];
     let winner = "";
 
@@ -197,6 +202,7 @@ const GameController = (function() {
  
     return {
         getActivePlayer,
+        editPlayerNames,
         getBoard: board.getBoard,
         restartBoard: board.restartBoard,
         playRound
@@ -238,7 +244,20 @@ const ScreenController = (function() {
         }
 
         if (result != "") {
-            restartGame();
+            const cellButtons = document.querySelectorAll(".cell");
+            cellButtons.forEach(cellBtn => {
+                cellBtn.disabled = true;
+            });
+
+            setTimeout(() => {
+                restartGame();
+
+                cellButtons.forEach(cellBtn => {
+                    if (cellBtn.textContent === " ") {
+                        cellBtn.disabled = false;
+                    }
+                });
+            }, 1000);
         }
     };
 
@@ -266,9 +285,16 @@ const ScreenController = (function() {
                             break;
                     }
 
+                    console.log("HELLO!");
+
                     let result = GameController.playRound(i, j);
                     cellButton.disabled = true;
                     updateScoreboard(result);
+
+                    if (GameController.getActivePlayer().name === "BOT") {
+                        console.log("AI run!");
+                        aiTurn();
+                    }
                 });
 
                 rowDiv.appendChild(cellButton);
@@ -297,12 +323,36 @@ const ScreenController = (function() {
         }
     };
 
-    const updatePlayerNames = () => {
-        const playerOneInput = document.getElementById("pvp-p1").value;
-        const playerTwoInput = document.getElementById("pvp-p2").value;
+    const updatePlayerNames = (isPvp = true) => {
+        let playerOneName;
+        let playerTwoName;
+
+        if (isPvp) {
+            playerOneName = document.getElementById("pvp-p1").value;
+            playerTwoName = document.getElementById("pvp-p2").value;
+        }
+        else {
+            let playerName = document.getElementById("pvb-player").value;
+            const selectedToken = document.querySelector(
+                'input[name="pvb-token"]:checked'
+            );
+            if (selectedToken.value === "X") {
+                playerOneName = playerName;
+                playerTwoName = "BOT";
+            }
+            else {
+                playerOneName = "BOT";
+                playerTwoName = playerName;
+            }
+        }
+
+        GameController.editPlayerNames(
+            playerOneName.toUpperCase(), 
+            playerTwoName.toUpperCase()
+        );
         
-        playerOneDiv.children[1].textContent = playerOneInput.toUpperCase();
-        playerTwoDiv.children[1].textContent = playerTwoInput.toUpperCase();
+        playerOneDiv.children[1].textContent = playerOneName.toUpperCase();
+        playerTwoDiv.children[1].textContent = playerTwoName.toUpperCase();
     };
 
     const setButtonsEventListeners = () => {
@@ -325,14 +375,61 @@ const ScreenController = (function() {
         });
 
         document.getElementById("start-pvp").addEventListener('click', () => {
-            updatePlayerNames();
+            updatePlayerNames(true);
             pvpDialog.close();
+            restartGame();
+        });
+
+        document.getElementById("back-pvb").addEventListener('click', () => {
+            pvbDialog.close();
+            menuDialog.showModal();
+        });
+
+        document.getElementById("start-pvb").addEventListener('click', () => {
+            updatePlayerNames(false);
+            pvbDialog.close();
             restartGame();
         });
     };
 
-    const aiTurn = () => {
+    const aiTurn = (mode = "EASY") => {
+        const cellButtons = document.querySelectorAll(".cell");
+        const filterEmptyCells = Array.from(cellButtons).filter(cellBtn => {
+            return cellBtn.textContent === " ";
+        });
 
+        console.log(filterEmptyCells);
+
+        let buttonToPress;
+            
+        if (mode === "EASY") {
+            const randomIndex = Math.floor(
+                Math.random() * filterEmptyCells.length
+            );
+            buttonToPress = filterEmptyCells[randomIndex];
+        }
+
+        // disable all cell buttons
+        cellButtons.forEach(cellBtn => {
+            cellBtn.disabled = true;
+        });
+        
+        // set timer for 2 seconds
+        setTimeout(() => {
+            let theActualButton = document.querySelector(
+                'button[data-cell-coords="' + 
+                buttonToPress.dataset.cellCoords + '"]'
+            );
+            theActualButton.disabled = false;
+            theActualButton.click();
+
+            // enable all cell buttons
+            cellButtons.forEach(cellBtn => {
+                if (cellBtn.textContent === " ") {
+                    cellBtn.disabled = false;
+                }
+            });
+        }, 2000);
     };
 
     setButtonsEventListeners();

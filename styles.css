@@ -59,6 +59,10 @@ button {
     border: 0;
 }
 
+button:focus {
+    outline-color: orange;
+}
+
 button:hover {
     color: orange;
 }
@@ -125,7 +129,6 @@ input:focus {
 
 .player-col > p {
     color: rgba(255, 255, 255, 0.5);
-
 }
 
 #gameboard {
