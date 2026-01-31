@@ -63,7 +63,8 @@ button:hover {
     color: orange;
 }
 
-dialog[open]#pvp-menu {
+dialog[open]#pvp-menu,
+dialog[open]#pvb-menu {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -163,4 +164,32 @@ input:focus {
 
 .active-player > p {
     color: white;
+}
+
+dialog[open] > #pvb-form {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+#pvb-form p {
+    text-align: start;
+}
+
+dialog[open] .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-row > label:hover:has(input) {
+    color: orange;
+}
+
+.form-row > label:has(input:checked) {
+    color: orange;
+}
+
+.form-row > label > input {
+    opacity: 0;
 }

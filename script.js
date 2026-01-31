@@ -206,6 +206,7 @@ const GameController = (function() {
 const ScreenController = (function() {
     const menuDialog = document.querySelector("#main-menu");
     const pvpDialog = document.querySelector("#pvp-menu");
+    const pvbDialog = document.querySelector("#pvb-menu");
 
     const gameboardDiv = document.querySelector("#gameboard");
     const scoreboardDiv = document.querySelector("#scoreboard");
@@ -313,6 +314,11 @@ const ScreenController = (function() {
             pvpDialog.showModal();
         });
 
+        document.getElementById("pvb-btn").addEventListener('click', () => {
+            menuDialog.close();
+            pvbDialog.showModal();
+        });
+
         document.getElementById("back-pvp").addEventListener('click', () => {
             pvpDialog.close();
             menuDialog.showModal();
@@ -323,7 +329,11 @@ const ScreenController = (function() {
             pvpDialog.close();
             restartGame();
         });
-    }
+    };
+
+    const aiTurn = () => {
+
+    };
 
     setButtonsEventListeners();
 })();

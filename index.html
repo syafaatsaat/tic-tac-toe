@@ -20,27 +20,72 @@
         <p>TIC TAC TOE</p>
         <div id="menu-buttons">
             <button id="pvp-btn">PLAYER VS. PLAYER</button>
-            <button id="pve-btn">PLAYER VS. BOT</button>
+            <button id="pvb-btn">PLAYER VS. BOT</button>
         </div>
     </dialog>
     <dialog id="pvp-menu">
         <p>PLAYER VS. PLAYER</p>
         <div id="name-form">
             <p>ENTER PLAYER NAMES:</p>
-            <div class="form-row">
+            <div>
                 <label for="pvp-p1">X</label>
                 <input type="text" id="pvp-p1" name="pvp-p1" 
-                placeholder="PLAYER ONE"/>
+                    placeholder="PLAYER ONE"/>
             </div>
-            <div class="form-row">
+            <div>
                 <label for="pvp-p2">O</label>
                 <input type="text" id="pvp-p2" name="pvp-p2" 
-                placeholder="PLAYER TWO"/>
+                    placeholder="PLAYER TWO"/>
             </div>
         </div>
         <div class="nav-buttons">
             <button id="back-pvp">BACK</button>
             <button id="start-pvp">START</button>
+        </div>
+    </dialog>
+    <dialog id="pvb-menu">
+        <p>PLAYER VS. BOT</p>
+        <div id="pvb-form">
+            <div class="form-row">
+                <label for="pvb-player">ENTER YOUR NAME:</label>
+                <input type="text" id="pvb-player" name="pvb-player" 
+                    placeholder="PLAYER"/>
+            </div>
+            <div class="form-row">
+                <p>CHOOSE YOUR TOKEN (X GOES FIRST)</p>
+                <label for="pvb-x">
+                    <input type="radio" id="pvb-x" name="pvb-token" 
+                        value="X" checked>
+                    X
+                </label>
+                <label for="pvb-o">
+                    <input type="radio" id="pvb-o" name="pvb-token" 
+                        value="O">
+                    O
+                </label>
+            </div>
+            <div class="form-row">
+                <p>DIFFICULTY</p>
+                <label for="pvb-easy">
+                    <input type="radio" id="pvb-easy" name="pvb-difficulty" 
+                        value="EASY" checked>
+                    EASY
+                </label>
+                <label for="pvb-medium">
+                    <input type="radio" id="pvb-medium" name="pvb-difficulty" 
+                        value="MEDIUM">
+                    MEDIUM
+                </label>
+                <label for="pvb-hard">
+                    <input type="radio" id="pvb-hard" name="pvb-difficulty" 
+                        value="HARD">
+                    HARD
+                </label>
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <button id="back-pvb">BACK</button>
+            <button id="start-pvb">START</button>
         </div>
     </dialog>
     <div id="main-content">
