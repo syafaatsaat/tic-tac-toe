@@ -28,7 +28,7 @@ body {
     padding: 0;
 }
 
-dialog {
+dialog[open] {
     width: 40%;
     height: 50%;
     border: 10px solid var(--blue-border-color);
@@ -44,7 +44,7 @@ p {
     margin: 0;
 }
 
-#menu-buttons {
+dialog[open] > #menu-buttons {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -63,7 +63,7 @@ button:hover {
     color: orange;
 }
 
-#pvp-menu {
+dialog[open]#pvp-menu {
     display: flex;
     flex-direction: column;
     justify-content: space-between;

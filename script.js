@@ -204,9 +204,13 @@ const GameController = (function() {
 })();
 
 const ScreenController = (function() {
+    const menuDialog = document.querySelector("#main-menu");
+    const pvpDialog = document.querySelector("#pvp-menu");
+
     const gameboardDiv = document.querySelector("#gameboard");
-    const playerOneDiv = document.querySelector("#player-one");
-    const playerTwoDiv = document.querySelector("#player-two");
+    const scoreboardDiv = document.querySelector("#scoreboard");
+    const playerOneDiv = scoreboardDiv.querySelector("#player-one");
+    const playerTwoDiv = scoreboardDiv.querySelector("#player-two");
 
     const updateScoreboard = (result = "") => {
         switch (GameController.getActivePlayer().token) {
@@ -292,9 +296,34 @@ const ScreenController = (function() {
         }
     };
 
-    return {
-        updateGameboard
+    const updatePlayerNames = () => {
+        const playerOneInput = document.getElementById("pvp-p1").value;
+        const playerTwoInput = document.getElementById("pvp-p2").value;
+        
+        playerOneDiv.children[1].textContent = playerOneInput.toUpperCase();
+        playerTwoDiv.children[1].textContent = playerTwoInput.toUpperCase();
     };
-})();
 
-ScreenController.updateGameboard();
+    const setButtonsEventListeners = () => {
+        menuDialog.showModal();
+        pvpDialog.close();
+
+        document.getElementById("pvp-btn").addEventListener('click', () => {
+            menuDialog.close();
+            pvpDialog.showModal();
+        });
+
+        document.getElementById("back-pvp").addEventListener('click', () => {
+            pvpDialog.close();
+            menuDialog.showModal();
+        });
+
+        document.getElementById("start-pvp").addEventListener('click', () => {
+            updatePlayerNames();
+            pvpDialog.close();
+            restartGame();
+        });
+    }
+
+    setButtonsEventListeners();
+})();
