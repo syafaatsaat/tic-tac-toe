@@ -137,18 +137,23 @@ const GameController = (function() {
 
     const players = [
         {
-            name: "Player One",
+            name: "PLAYER ONE",
             token: "X"
         },
         {
-            name: "Player Two",
+            name: "PLAYER TWO",
             token: "O"
         }
     ];
 
     const editPlayerNames = (p1Name, p2Name) => {
-        players[0].name = p1Name;
-        players[1].name = p2Name;
+        if (p1Name.trim() != "") {
+            players[0].name = p1Name;
+        }
+
+        if (p2Name.trim() != "") {
+            players[1].name = p2Name;
+        }
     };
 
     let activePlayer = players[0];
@@ -159,6 +164,8 @@ const GameController = (function() {
     };
 
     const getActivePlayer = () => activePlayer;
+
+    const getPlayers = () => players;
 
     const printRound = () => {
         board.printBoard();
@@ -202,6 +209,7 @@ const GameController = (function() {
  
     return {
         getActivePlayer,
+        getPlayers,
         editPlayerNames,
         getBoard: board.getBoard,
         restartBoard: board.restartBoard,
@@ -333,6 +341,9 @@ const ScreenController = (function() {
         }
         else {
             let playerName = document.getElementById("pvb-player").value;
+            if (playerName.trim() === "") {
+                playerName = "PLAYER";
+            }
             const selectedToken = document.querySelector(
                 'input[name="pvb-token"]:checked'
             );
@@ -351,8 +362,10 @@ const ScreenController = (function() {
             playerTwoName.toUpperCase()
         );
         
-        playerOneDiv.children[1].textContent = playerOneName.toUpperCase();
-        playerTwoDiv.children[1].textContent = playerTwoName.toUpperCase();
+        playerOneDiv.children[1].textContent = 
+            GameController.getPlayers()[0].name;
+        playerTwoDiv.children[1].textContent = 
+            GameController.getPlayers()[1].name;
     };
 
     const setButtonsEventListeners = () => {
