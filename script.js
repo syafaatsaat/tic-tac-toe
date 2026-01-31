@@ -206,13 +206,20 @@ const GameController = (function() {
 
         return "";
     };
+
+    const restartBoard = () => {
+        board.restartBoard();
+        if (activePlayer.token != "X") {
+            switchPlayerTurn();
+        }
+    };
  
     return {
         getActivePlayer,
         getPlayers,
         editPlayerNames,
         getBoard: board.getBoard,
-        restartBoard: board.restartBoard,
+        restartBoard,
         playRound
     };
 })();
@@ -328,6 +335,10 @@ const ScreenController = (function() {
 
         if (playerTwoDiv.classList.contains("active-player")) {
             playerTwoDiv.classList.remove("active-player");
+        }
+
+        if (GameController.getActivePlayer().name === "BOT") {
+            aiTurn();
         }
     };
 
