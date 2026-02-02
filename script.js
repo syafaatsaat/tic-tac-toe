@@ -213,6 +213,33 @@ const GameController = (function() {
             switchPlayerTurn();
         }
     };
+
+    const getBotTurnCoords = (mode = "EASY") => {
+        const filteredEmptyCells = board.getBoard()
+        .flat()
+        .map((cell, index) => {
+            const row = Math.round(index / 3);
+            const col = index % 3;
+            const coords = row + "-" + col;
+            return {
+                coord: coords, 
+                value: cell.getValue()
+            };
+        })
+        .filter(cell => {
+            return cell.value === "_";
+        });
+        //console.log(filteredEmptyCells);
+
+        const randomIndex = Math.floor(
+            Math.random() * filteredEmptyCells.length
+        );
+
+        switch (mode) {
+            case "EASY":
+                return filteredEmptyCells[randomIndex].coord;
+        }
+    };
  
     return {
         getActivePlayer,
@@ -220,7 +247,8 @@ const GameController = (function() {
         editPlayerNames,
         getBoard: board.getBoard,
         restartBoard,
-        playRound
+        playRound,
+        getBotTurnCoords
     };
 })();
 
@@ -418,20 +446,8 @@ const ScreenController = (function() {
 
     const aiTurn = (mode = "EASY") => {
         const cellButtons = document.querySelectorAll(".cell");
-        const filterEmptyCells = Array.from(cellButtons).filter(cellBtn => {
-            return cellBtn.textContent === " ";
-        });
 
-        console.log(filterEmptyCells);
-
-        let buttonToPress;
-            
-        if (mode === "EASY") {
-            const randomIndex = Math.floor(
-                Math.random() * filterEmptyCells.length
-            );
-            buttonToPress = filterEmptyCells[randomIndex];
-        }
+        const coords = GameController.getBotTurnCoords();
 
         // disable all cell buttons
         cellButtons.forEach(cellBtn => {
@@ -440,12 +456,11 @@ const ScreenController = (function() {
         
         // set timer for 2 seconds
         setTimeout(() => {
-            let theActualButton = document.querySelector(
-                'button[data-cell-coords="' + 
-                buttonToPress.dataset.cellCoords + '"]'
+            let theCellButton = document.querySelector(
+                'button[data-cell-coords="' + coords + '"]'
             );
-            theActualButton.disabled = false;
-            theActualButton.click();
+            theCellButton.disabled = false;
+            theCellButton.click();
 
             // enable all cell buttons
             cellButtons.forEach(cellBtn => {
