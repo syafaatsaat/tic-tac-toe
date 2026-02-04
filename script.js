@@ -594,7 +594,6 @@ const ScreenController = (function() {
     };
 
     const setButtonsEventListeners = () => {
-        menuDialog.showModal();
         pvpDialog.close();
 
         document.getElementById("pvp-btn").addEventListener('click', () => {
