@@ -31,12 +31,12 @@ const GameController = (function() {
         const getNumOfRows = () => rows;
         const getNumOfColumns = () => columns;
 
-        const chooseCell = (row, column, player) => {
-            if (board[row][column].getValue() != "_") {
-                return false;
-            }
+        const chooseCell = (row, column, token) => {
+            // if (board[row][column].getValue() != "_") {
+            //     return false;
+            // }
 
-            board[row][column].setToken(player);
+            board[row][column].setToken(token);
             return true;
         };
 
@@ -73,53 +73,53 @@ const GameController = (function() {
 
         const checkWinner = () => {
             for (let i = 0; i < 3; ++i) {
-                if (board[i][0].getValue() === "X" 
-                    && board[i][1].getValue() === "X" 
-                    && board[i][2].getValue() === "X") {
+                if (board[i][0].getValue() === board[i][1].getValue() 
+                    && board[i][1].getValue() === board[i][2].getValue()) 
+                {
+                    if (board[i][0].getValue() === "X") {
+                        return "X";
+                    }
+                    else if (board[i][0].getValue() === "O") {
+                        return "O";
+                    }
+                }
+
+                if (board[0][i].getValue() === board[1][i].getValue()
+                    && board[1][i].getValue() === board[2][i].getValue()) 
+                {
+                    if (board[0][i].getValue() === "X") {
+                        return "X";
+                    }
+                    else if (board[0][i].getValue() === "O") {
+                        return "O";
+                    }
+                }
+            }
+
+            if (board[0][0].getValue() === board[1][1].getValue() 
+                && board[1][1].getValue() === board[2][2].getValue()) 
+            {
+                if (board[0][0].getValue() === "X") {
                     return "X";
                 }
-                else if (board[i][0].getValue() === "O" 
-                    && board[i][1].getValue() === "O" 
-                    && board[i][2].getValue() === "O") {
+                else if (board[0][0].getValue() === "O") {
                     return "O";
                 }
+            }
 
-                if (board[0][i].getValue() === "X" 
-                    && board[1][i].getValue() === "X" 
-                    && board[2][i].getValue() === "X") {
+            if (board[0][2].getValue() === board[1][1].getValue() 
+                && board[1][1].getValue()  === board[2][0].getValue()) 
+            {
+                if (board[0][2].getValue() === "X") {
                     return "X";
                 }
-                else if (board[0][i].getValue() === "O" 
-                    && board[1][i].getValue() === "O" 
-                    && board[2][i].getValue() === "O") {
+                else if (board[0][2].getValue() === "O") {
                     return "O";
                 }
-            }
-
-            if (board[0][0].getValue() === "X" 
-                && board[1][1].getValue() === "X" 
-                && board[2][2].getValue() === "X") {
-                return "X";
-            }
-            else if (board[0][0].getValue() === "O" 
-                && board[1][1].getValue() === "O" 
-                && board[2][2].getValue() === "O") {
-                return "O";
-            }
-
-            if (board[0][2].getValue() === "X" 
-                && board[1][1].getValue() === "X" 
-                && board[2][0].getValue() === "X") {
-                return "X";
-            }
-            else if (board[0][2].getValue() === "O" 
-                && board[1][1].getValue() === "O" 
-                && board[2][0].getValue() === "O") {
-                return "O";
             }
 
             return "";
-        }
+        };
 
         return {
             getBoard,
@@ -133,7 +133,357 @@ const GameController = (function() {
         };
     }
 
+    function BotSystem() {
+        let botToken = "X";
+        let playerToken = "O";
+        let difficulty = "EASY";
+
+        const setTokens = (bot, player) => {
+            botToken = bot;
+            playerToken = player;
+        };
+
+        const setDifficulty = (mode) => {
+            difficulty = mode;
+        };
+
+        // const checkGotEmptyCell = () => {
+        //     for (let i = 0; i < 3; ++i) {
+        //         for (let j = 0; j < 3; ++j) {
+        //             if (board[i][j].getValue() === "_") {
+        //                 return true;
+        //             }
+        //         }
+        //     }
+
+        //     return false;
+        // };
+
+        // const evaluate = (board) => {
+        //     for (let i = 0; i < 3; ++i) {
+        //         if (board[i][0].getValue() === board[i][1].getValue() 
+        //             && board[i][1].getValue() === board[i][2].getValue()) 
+        //         {
+        //             if (board[i][0].getValue() === botToken) {
+        //                 return 10;
+        //             }
+        //             else if (board[i][0].getValue() === playerToken) {
+        //                 return -10;
+        //             }
+        //         }
+
+        //         if (board[0][i].getValue() === board[1][i].getValue() 
+        //             && board[1][i].getValue() === board[2][i].getValue()) 
+        //         {
+        //             if (board[0][i].getValue() === botToken) {
+        //                 return 10;
+        //             }
+        //             else if (board[0][i].getValue() === playerToken) {
+        //                 return -10;
+        //             }
+        //         }
+        //     }
+
+        //     if (board[0][0].getValue() === board[1][1].getValue() 
+        //         && board[1][1].getValue() === board[2][2].getValue()) 
+        //     {
+        //         if (board[0][0].getValue() === botToken) {
+        //             return 10;
+        //         }
+        //         else if (board[0][0].getValue() === playerToken) {
+        //             return -10;
+        //         }
+        //     }
+
+        //     if (board[0][2].getValue() === board[1][1].getValue() 
+        //         && board[1][1].getValue()  === board[2][0].getValue()) 
+        //     {
+        //         if (board[0][2].getValue() === botToken) {
+        //             return 10;
+        //         }
+        //         else if (board[0][2].getValue() === playerToken) {
+        //             return -10;
+        //         }
+        //     }
+
+        //     return 0;
+        // };
+
+        // const minimax = (board, depth, isMax) => {
+        //     let score = evaluate(board);
+
+        //     if (score === 10) {
+        //         return score;
+        //     }
+
+        //     if (score === -10) {
+        //         return score;
+        //     }
+
+        //     if (checkGotEmptyCell(board) === false) {
+        //         return 0;
+        //     }
+
+        //     if (isMax) {
+        //         let best = -1000;
+
+        //         for (let i = 0; i < 3; ++i) {
+        //             for (let j = 0; j < 3; ++j) {
+        //                 if (board[i][j] === "_") {
+        //                     board[i][j] = botToken;
+                            
+        //                     best = Math.max(
+        //                         best, 
+        //                         minimax(board, depth + 1, !isMax)
+        //                     );
+                            
+        //                     board[i][j] = "_";
+        //                 }
+        //             }
+        //         }
+
+        //         return best;
+        //     }
+        //     else {
+        //         let best = 1000;
+
+        //         for (let i = 0; i < 3; ++i) {
+        //             for (let j = 0; j < 3; ++j) {
+        //                 if (board[i][j] === "_") {
+        //                     board[i][j] = playerToken;
+                            
+        //                     best = Math.min(
+        //                         best, 
+        //                         minimax(board, depth + 1, !isMax)
+        //                     );
+                            
+        //                     board[i][j] = "_";
+        //                 }
+        //             }
+        //         }
+
+        //         return best;
+        //     }
+        // };
+
+        // const findBestMove = (board) => {
+        //     let bestValue = -1000;
+        //     let bestMove = {
+        //         row: -1,
+        //         col: -1
+        //     };
+
+        //     for (let i = 0; i < 3; ++i) {
+        //         for (let j = 0; j < 3; ++j) {
+        //             if (board[i][j] === "_") {
+        //                 board[i][j] = botToken;
+                        
+        //                 let moveValue = minimax(board, 0, false);
+                        
+        //                 board[i][j] = "_";
+
+        //                 if (moveValue > bestValue) {
+        //                     bestMove.row = i;
+        //                     bestMove.col = j;
+        //                     console.log(bestMove);
+        //                     bestValue = moveValue;
+        //                 }
+        //             }
+        //         }
+        //     }
+            
+        //     console.log(bestMove);
+        //     return bestMove;
+        // };
+
+        const getEmptyCells = () => {
+            return board.getBoard()
+                .flat()
+                .map((cell, index) => {
+                    const row = Math.floor(index / 3);
+                    const col = index % 3;
+                    return {
+                        row,
+                        col,
+                        value: cell.getValue()
+                    };
+                })
+                .filter(cell => {
+                    return cell.value === "_";
+                });
+        };
+
+        const findWinningMove = (token) => {
+            const emptyCells = getEmptyCells();
+            for (const cell of emptyCells) {
+                let i = cell.row;
+                let j = cell.col;
+                board.chooseCell(i, j, token);
+
+                if (board.checkWinner() === token) {
+                    board.chooseCell(i, j, "_");
+                    return cell;
+                }
+
+                board.chooseCell(i, j, "_");
+            }
+
+            return null;
+        };
+
+        const findForkMove = (token) => {
+            const emptyCells = getEmptyCells();
+            // not enough space to create a folk
+            if (emptyCells.length < 5)
+                return null;
+
+            for (const cell of emptyCells) {
+                let i = cell.row;
+                let j = cell.col;
+                let winChances = 0;
+                board.chooseCell(i, j, token);
+
+                const updatedEmptyCells = getEmptyCells();
+                for (const tempCells of updatedEmptyCells) {
+                    let x = tempCells.row;
+                    let y = tempCells.col;
+                    board.chooseCell(x, y, token);
+
+                    if (board.checkWinner() === token)
+                        winChances++;
+
+                    board.chooseCell(x, y, "_");
+                }
+
+                board.chooseCell(i, j, "_");
+
+                if (winChances >= 2)
+                    return cell;
+            }
+
+            return null;
+        };
+
+        const getRandomMove = () => {
+            const emptyCells = getEmptyCells();
+            console.log(emptyCells);
+
+            if (emptyCells.length > 0) {
+                return emptyCells[
+                    Math.floor(Math.random() * emptyCells.length)
+                ];
+            }
+
+            return null;
+        };
+
+        // Easy AI: If player can win, blocks the player's play
+        // ELSE, has a small chance of making a smart move
+        // OTHERWISE make a random move
+        const getEasyMove = () => {
+            let blockMove = findWinningMove(playerToken);
+            if (blockMove !== null)
+                return blockMove;
+
+            if (Math.random() < 0.20) {
+                let winningMove = findWinningMove(botToken);
+                if (winningMove !== null)
+                    return winningMove;
+            }
+
+            return getRandomMove();
+        };
+
+        // Medium AI: Uses basic strategy (win -> block -> center)
+        // BUT has a chance for making random mistake
+        const getMediumMove = () => {
+            if (Math.random() < 0.25)
+                return getRandomMove();
+
+            let winningMove = findWinningMove(botToken);
+            if (winningMove !== null)
+                return winningMove;
+
+            let blockMove = findWinningMove(playerToken);
+            if (blockMove !== null)
+                return blockMove;
+
+            if (board.getBoard()[1][1].getValue() === "_")
+                return { row: 1, col: 1 };
+
+            return getRandomMove();
+        };
+
+        // Hard AI: Follows a strict set of optimal moves
+        const getHardMove = () => {
+            let winningMove = findWinningMove(botToken);
+            if (winningMove !== null)
+                return winningMove;
+
+            let blockMove = findWinningMove(playerToken);
+            console.log(blockMove);
+            if (blockMove !== null)
+                return blockMove;
+
+            let forkMove = findForkMove(botToken);
+            if (forkMove !== null)
+                return forkMove;
+
+            let blockForkMove = findForkMove(playerToken);
+            if (blockForkMove !== null)
+                return blockForkMove;
+
+            if (board.getBoard()[1][1].getValue() === "_")
+                return { row: 1, col: 1 };
+
+            const corners = [[0, 0], [0, 2], [2, 0], [2, 2]];
+            const playerCorners = corners.filter(
+                c => board.getBoard()[c[0]][c[1]].getValue() === playerToken
+            );
+            if (playerCorners.length === 1) {
+                const i = Math.abs(playerCorners[0][0] - 2);
+                const j = Math.abs(playerCorners[0][1] - 2);
+                console.log(i, j);
+                if (board.getBoard()[i][j].getValue() === "_")
+                    return { row: i, col: j };
+            }
+
+            const emptyCorners = corners.filter(
+                c => board.getBoard()[c[0]][c[1]].getValue() === "_"
+            );
+            if (emptyCorners.length > 0) {
+                let randomCorner = emptyCorners[
+                    Math.floor(Math.random() * emptyCorners.length)
+                ];
+                return { 
+                    row: randomCorner[0], 
+                    col: randomCorner[1] 
+                };
+            }
+
+            return getRandomMove();
+        };
+
+        const getBotMove = () => {
+            switch (difficulty) {
+                case "EASY":
+                    return getEasyMove();
+                case "MEDIUM":
+                    return getMediumMove();
+                case "HARD":
+                    return getHardMove();
+            };
+        };
+
+        return {
+            setTokens,
+            setDifficulty,
+            getBotMove
+        }
+    }
+
     const board = GameBoard();
+    const botSystem = BotSystem();
 
     const players = [
         {
@@ -213,42 +563,17 @@ const GameController = (function() {
             switchPlayerTurn();
         }
     };
-
-    const getBotTurnCoords = (mode = "EASY") => {
-        const filteredEmptyCells = board.getBoard()
-        .flat()
-        .map((cell, index) => {
-            const row = Math.round(index / 3);
-            const col = index % 3;
-            const coords = row + "-" + col;
-            return {
-                coord: coords, 
-                value: cell.getValue()
-            };
-        })
-        .filter(cell => {
-            return cell.value === "_";
-        });
-        //console.log(filteredEmptyCells);
-
-        const randomIndex = Math.floor(
-            Math.random() * filteredEmptyCells.length
-        );
-
-        switch (mode) {
-            case "EASY":
-                return filteredEmptyCells[randomIndex].coord;
-        }
-    };
  
     return {
         getActivePlayer,
         getPlayers,
         editPlayerNames,
         getBoard: board.getBoard,
+        setDifficulty: botSystem.setDifficulty,
+        setPVBTokens: botSystem.setTokens,
         restartBoard,
         playRound,
-        getBotTurnCoords
+        getBotMove: botSystem.getBotMove
     };
 })();
 
@@ -383,17 +708,27 @@ const ScreenController = (function() {
             if (playerName.trim() === "") {
                 playerName = "PLAYER";
             }
+
             const selectedToken = document.querySelector(
                 'input[name="pvb-token"]:checked'
             );
+
             if (selectedToken.value === "X") {
                 playerOneName = playerName;
                 playerTwoName = "BOT";
+                GameController.setPVBTokens("O", "X");
             }
             else {
                 playerOneName = "BOT";
                 playerTwoName = playerName;
+                GameController.setPVBTokens("X", "O");
             }
+
+            const selectedDifficulty = document.querySelector(
+                'input[name="pvb-difficulty"]:checked'
+            );
+            console.log(selectedDifficulty.value);
+            GameController.setDifficulty(selectedDifficulty.value);
         }
 
         GameController.editPlayerNames(
@@ -444,10 +779,10 @@ const ScreenController = (function() {
         });
     };
 
-    const aiTurn = (mode = "EASY") => {
+    const aiTurn = () => {
         const cellButtons = document.querySelectorAll(".cell");
 
-        const coords = GameController.getBotTurnCoords();
+        const coords = GameController.getBotMove();
 
         // disable all cell buttons
         cellButtons.forEach(cellBtn => {
@@ -456,8 +791,10 @@ const ScreenController = (function() {
         
         // set timer for 2 seconds
         setTimeout(() => {
+            console.log(coords);
+            let dataCoords = coords.row + "-" + coords.col;
             let theCellButton = document.querySelector(
-                'button[data-cell-coords="' + coords + '"]'
+                'button[data-cell-coords="' + dataCoords + '"]'
             );
             theCellButton.disabled = false;
             theCellButton.click();
