@@ -435,6 +435,7 @@ const ScreenController = (function() {
 
     const gameboardDiv = document.querySelector("#gameboard");
     const scoreboardDiv = document.querySelector("#scoreboard");
+    const gameNavDiv = document.querySelector("#game-nav");
 
     const updateScoreboard = (result = "") => {
         const playerOneDiv = scoreboardDiv.querySelector("#player-one");
@@ -481,6 +482,27 @@ const ScreenController = (function() {
         }
     };
 
+    const renderGameMenuButtons = () => {
+        const restartBtn = document.createElement("button");
+        restartBtn.setAttribute("id", "restart-btn");
+        restartBtn.textContent = "RESTART";
+        restartBtn.addEventListener('click', () => {
+            restartGame();
+        });
+
+        const mainMenuBtn = document.createElement("button");
+        mainMenuBtn.setAttribute("id", "main-menu-btn");
+        mainMenuBtn.textContent = "QUIT";
+        mainMenuBtn.addEventListener('click', () => {
+            clearScoreboardAndMenuButtons();
+            clearGameboard();
+            menuDialog.show();
+        });
+
+        gameNavDiv.appendChild(restartBtn);
+        gameNavDiv.appendChild(mainMenuBtn);
+    };
+
     const renderScoreboard = () => {
         const playerOneDiv = document.createElement("div");
         playerOneDiv.setAttribute("id", "player-one");
@@ -514,9 +536,9 @@ const ScreenController = (function() {
 
         scoreboardDiv.appendChild(playerOneDiv);
         scoreboardDiv.appendChild(playerTwoDiv);
-    }
+    };
 
-    const renderGameScreen = () => {
+    const renderGameboard = () => {
         const gameBoard = GameController.getBoard();
 
         updateScoreboard();
@@ -555,19 +577,36 @@ const ScreenController = (function() {
         }
     };
 
+    const clearScoreboardAndMenuButtons = () => {
+        let child = scoreboardDiv.lastElementChild;
+        while (child) {
+            scoreboardDiv.removeChild(child);
+            child = scoreboardDiv.lastElementChild;
+        }
+
+        child = gameNavDiv.lastElementChild;
+        while (child) {
+            gameNavDiv.removeChild(child);
+            child = gameNavDiv.lastElementChild;
+        }
+    };
+
+    const clearGameboard = () => {
+        let child = gameboardDiv.lastElementChild;
+        while (child) {
+            gameboardDiv.removeChild(child);
+            child = gameboardDiv.lastElementChild;
+        }
+    };
+
     const restartGame = () => {
         const playerOneDiv = scoreboardDiv.querySelector("#player-one");
         const playerTwoDiv = scoreboardDiv.querySelector("#player-two");
 
         GameController.restartBoard();
 
-        let child = gameboardDiv.lastElementChild;
-        while (child) {
-            gameboardDiv.removeChild(child);
-            child = gameboardDiv.lastElementChild;
-        }
-
-        renderGameScreen();
+        clearGameboard();
+        renderGameboard();
 
         if (playerOneDiv.classList.contains("active-player") === false) {
             playerOneDiv.classList.add("active-player");
@@ -646,6 +685,7 @@ const ScreenController = (function() {
             updatePlayerNames(true);
             pvpDialog.close();
             renderScoreboard();
+            renderGameMenuButtons();
             restartGame();
         });
 
@@ -658,6 +698,7 @@ const ScreenController = (function() {
             updatePlayerNames(false);
             pvbDialog.close();
             renderScoreboard();
+            renderGameMenuButtons();
             restartGame();
         });
     };
