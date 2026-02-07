@@ -435,10 +435,11 @@ const ScreenController = (function() {
 
     const gameboardDiv = document.querySelector("#gameboard");
     const scoreboardDiv = document.querySelector("#scoreboard");
-    const playerOneDiv = scoreboardDiv.querySelector("#player-one");
-    const playerTwoDiv = scoreboardDiv.querySelector("#player-two");
 
     const updateScoreboard = (result = "") => {
+        const playerOneDiv = scoreboardDiv.querySelector("#player-one");
+        const playerTwoDiv = scoreboardDiv.querySelector("#player-two");
+
         switch (GameController.getActivePlayer().token) {
             case "X":
                 playerOneDiv.classList.add("active-player");
@@ -480,14 +481,47 @@ const ScreenController = (function() {
         }
     };
 
-    const updateGameboard = () => {
+    const renderScoreboard = () => {
+        const playerOneDiv = document.createElement("div");
+        playerOneDiv.setAttribute("id", "player-one");
+        playerOneDiv.classList.add("player-col");
+
+        const p1TokenP = document.createElement("p");
+        p1TokenP.textContent = "[X]";
+        const p1NameP = document.createElement("p");
+        p1NameP.textContent = GameController.getPlayers()[0].name;
+        const p1ScoreP = document.createElement("p");
+        p1ScoreP.textContent = "0";
+
+        playerOneDiv.appendChild(p1TokenP);
+        playerOneDiv.appendChild(p1NameP);
+        playerOneDiv.appendChild(p1ScoreP);
+
+        const playerTwoDiv = document.createElement("div");
+        playerTwoDiv.setAttribute("id", "player-two");
+        playerTwoDiv.classList.add("player-col");
+
+        const p2TokenP = document.createElement("p");
+        p2TokenP.textContent = "[O]";
+        const p2NameP = document.createElement("p");
+        p2NameP.textContent = GameController.getPlayers()[1].name;
+        const p2ScoreP = document.createElement("p");
+        p2ScoreP.textContent = "0";
+
+        playerTwoDiv.appendChild(p2TokenP);
+        playerTwoDiv.appendChild(p2NameP);
+        playerTwoDiv.appendChild(p2ScoreP);
+
+        scoreboardDiv.appendChild(playerOneDiv);
+        scoreboardDiv.appendChild(playerTwoDiv);
+    }
+
+    const renderGameScreen = () => {
         const gameBoard = GameController.getBoard();
+
         updateScoreboard();
 
         for (let i = 0; i < gameBoard.length; ++i) {
-            const rowDiv = document.createElement("div");
-            rowDiv.classList.add("row");
-
             for (let j = 0; j < gameBoard[i].length; ++j) {
                 const cellButton = document.createElement("button");
                 cellButton.classList.add("cell");
@@ -516,14 +550,15 @@ const ScreenController = (function() {
                     }
                 });
 
-                rowDiv.appendChild(cellButton);
+                gameboardDiv.appendChild(cellButton);
             }
-
-            gameboardDiv.appendChild(rowDiv);
         }
     };
 
     const restartGame = () => {
+        const playerOneDiv = scoreboardDiv.querySelector("#player-one");
+        const playerTwoDiv = scoreboardDiv.querySelector("#player-two");
+
         GameController.restartBoard();
 
         let child = gameboardDiv.lastElementChild;
@@ -531,7 +566,8 @@ const ScreenController = (function() {
             gameboardDiv.removeChild(child);
             child = gameboardDiv.lastElementChild;
         }
-        updateGameboard();
+
+        renderGameScreen();
 
         if (playerOneDiv.classList.contains("active-player") === false) {
             playerOneDiv.classList.add("active-player");
@@ -586,11 +622,6 @@ const ScreenController = (function() {
             playerOneName.toUpperCase(), 
             playerTwoName.toUpperCase()
         );
-        
-        playerOneDiv.children[1].textContent = 
-            GameController.getPlayers()[0].name;
-        playerTwoDiv.children[1].textContent = 
-            GameController.getPlayers()[1].name;
     };
 
     const setButtonsEventListeners = () => {
@@ -598,33 +629,35 @@ const ScreenController = (function() {
 
         document.getElementById("pvp-btn").addEventListener('click', () => {
             menuDialog.close();
-            pvpDialog.showModal();
+            pvpDialog.show();
         });
 
         document.getElementById("pvb-btn").addEventListener('click', () => {
             menuDialog.close();
-            pvbDialog.showModal();
+            pvbDialog.show();
         });
 
         document.getElementById("back-pvp").addEventListener('click', () => {
             pvpDialog.close();
-            menuDialog.showModal();
+            menuDialog.show();
         });
 
         document.getElementById("start-pvp").addEventListener('click', () => {
             updatePlayerNames(true);
             pvpDialog.close();
+            renderScoreboard();
             restartGame();
         });
 
         document.getElementById("back-pvb").addEventListener('click', () => {
             pvbDialog.close();
-            menuDialog.showModal();
+            menuDialog.show();
         });
 
         document.getElementById("start-pvb").addEventListener('click', () => {
             updatePlayerNames(false);
             pvbDialog.close();
+            renderScoreboard();
             restartGame();
         });
     };
